@@ -2,6 +2,8 @@
 
 #define BUZZER_PIN 10
 
+const int debugLEDPin = 13;
+
 //
 //  Serial Control
 //
@@ -291,6 +293,10 @@ void serialEvent() {
     if (inChar == '#') {
       inBuf[inBufIdx++] = 0x0;
       serialCmdRdy = true;
+      digitalWrite(debugLEDPin, HIGH);
+      delay(10);
+      digitalWrite(debugLEDPin, LOW);
+      delay(10);
     }
     else if ( inChar == ':') {
       inBufIdx = 0;
@@ -329,10 +335,13 @@ void complain() {
 //
 
 void setup() {
-  Serial.begin(9600);
+  pinMode(debugLEDPin, OUTPUT);
+  digitalWrite(debugLEDPin, HIGH);
+  
+  Serial.begin(115200);
   
   // Allow everybody to wake up...
-  delay(2000);
+  delay(750);
   
   // I'm awake, I'm awake!!!
   beep(100);
@@ -351,6 +360,7 @@ void setup() {
 
   // All done!
   beep(100);
+  digitalWrite(debugLEDPin, LOW);
 }
 
 void loop() {
